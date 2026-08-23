@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { getSignupDisabled } from "@/lib/platform-lockdown";
+import { getSignupDisabled, getWishlistEnabled } from "@/lib/platform-lockdown";
 import { getSession } from "@/lib/session";
 import { SignInForm } from "./sign-in-form";
 
@@ -24,11 +24,17 @@ export default async function SignInPage({
     redirect(target);
   }
 
-  const signupDisabled = await getSignupDisabled();
+  const [signupDisabled, wishlistEnabled] = await Promise.all([
+    getSignupDisabled(),
+    getWishlistEnabled(),
+  ]);
 
   return (
     <Suspense>
-      <SignInForm signUpEnabled={!signupDisabled} />
+      <SignInForm
+        signUpEnabled={!signupDisabled}
+        requestAccessEnabled={signupDisabled && wishlistEnabled}
+      />
     </Suspense>
   );
 }

@@ -13,14 +13,20 @@ import {
 } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/toast";
-import { setSignupDisabled } from "@/lib/actions/platform";
+import { setSignupDisabled, setWishlistEnabled } from "@/lib/actions/platform";
 
-export function SignupControlPanel({ disabled }: { disabled: boolean }) {
+export function SignupControlPanel({
+  disabled,
+  wishlistEnabled,
+}: {
+  disabled: boolean;
+  wishlistEnabled: boolean;
+}) {
   const router = useRouter();
-  const [pending, setPending] = useState(false);
+  const [pending, setPending] = useState<"signup" | "wishlist" | null>(null);
 
   async function toggle(nextDisabled: boolean) {
-    setPending(true);
+    setPending("signup");
     try {
       await setSignupDisabled({ disabled: nextDisabled });
       toast.success(
@@ -36,7 +42,28 @@ export function SignupControlPanel({ disabled }: { disabled: boolean }) {
           : "Unable to update sign-up setting.",
       );
     } finally {
-      setPending(false);
+      setPending(null);
+    }
+  }
+
+  async function toggleWishlist(nextEnabled: boolean) {
+    setPending("wishlist");
+    try {
+      await setWishlistEnabled({ enabled: nextEnabled });
+      toast.success(
+        nextEnabled
+          ? "Wishlist requests enabled."
+          : "Wishlist requests disabled.",
+      );
+      router.refresh();
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Unable to update wishlist setting.",
+      );
+    } finally {
+      setPending(null);
     }
   }
 
@@ -74,8 +101,25 @@ export function SignupControlPanel({ disabled }: { disabled: boolean }) {
           <Switch
             id="signup-disabled"
             checked={disabled}
-            disabled={pending}
+            disabled={pending !== null}
             onCheckedChange={toggle}
+          />
+        </label>
+        <label
+          htmlFor="wishlist-enabled"
+          className="mt-5 flex items-center justify-between gap-4 border-t border-border pt-5"
+        >
+          <div className="flex flex-col gap-0.5">
+            <span className="text-sm font-semibold">Enable wishlist</span>
+            <span className="text-sm text-muted-foreground">
+              Let visitors request access when invite-only mode is on.
+            </span>
+          </div>
+          <Switch
+            id="wishlist-enabled"
+            checked={wishlistEnabled}
+            disabled={pending !== null}
+            onCheckedChange={toggleWishlist}
           />
         </label>
       </CardContent>

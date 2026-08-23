@@ -484,6 +484,20 @@
       "when": 1787412497815,
       "tag": "0068_brief_bulldozer",
       "breakpoints": true
+    },
+    {
+      "idx": 69,
+      "version": "7",
+      "when": 1787504109956,
+      "tag": "0069_bizarre_tarot",
+      "breakpoints": true
+    },
+    {
+      "idx": 70,
+      "version": "7",
+      "when": 1787505019709,
+      "tag": "0070_worried_gwen_stacy",
+      "breakpoints": true
     }
   ]
 }

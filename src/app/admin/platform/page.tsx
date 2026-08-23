@@ -5,15 +5,17 @@ import { PageContainer } from "@/components/layout/page-container";
 import {
   getPlatformLockdown,
   getSignupDisabled,
+  getWishlistEnabled,
 } from "@/lib/platform-lockdown";
 
 // A kill-switch page must never serve a cached state.
 export const dynamic = "force-dynamic";
 
 export default async function AdminPlatformPage() {
-  const [lockdown, signupDisabled] = await Promise.all([
+  const [lockdown, signupDisabled, wishlistEnabled] = await Promise.all([
     getPlatformLockdown(),
     getSignupDisabled(),
+    getWishlistEnabled(),
   ]);
 
   return (
@@ -24,7 +26,10 @@ export default async function AdminPlatformPage() {
         description="Platform-wide switches. Changes apply immediately to every organization."
       />
 
-      <SignupControlPanel disabled={signupDisabled} />
+      <SignupControlPanel
+        disabled={signupDisabled}
+        wishlistEnabled={wishlistEnabled}
+      />
 
       <PlatformLockdownPanel
         enabled={lockdown.enabled}

@@ -4,6 +4,52 @@ Sprintify is a multi-tenant product-management platform for planning work, runni
 
 It is built with Next.js App Router, React, Better Auth, Drizzle ORM/PostgreSQL, and Tailwind CSS.
 
+**Live application:** [sprintify.celestern.com](https://sprintify.celestern.com/)
+
+## What Sprintify does
+
+Sprintify gives product and delivery teams one shared operating space for the
+work that moves a sprint forward. It is designed to replace scattered status
+meetings, spreadsheets, and disconnected task lists with an accountable,
+auditable view of plans, progress, and capacity.
+
+### Core workflows
+
+- **Plan and deliver work** — create projects, organize a prioritized backlog,
+  run sprints, and follow progress through board and dashboard views.
+- **Collaborate in context** — comment on work items, reply in threads, mention
+  teammates, react, and attach files directly to the relevant work.
+- **Coordinate people and capacity** — manage organizations, teams, roles,
+  availability, holidays, leave, and sprint capacity.
+- **See delivery health** — use dashboard metrics, workflow states, project
+  views, and audit history to understand what is happening and what needs
+  attention.
+- **Use AI deliberately** — configure organization or platform AI providers
+  for searchable content, comment assistance, summaries, and suggested next
+  actions. AI features are only available where an organization has configured
+  access.
+- **Operate the platform** — platform administrators manage users,
+  organizations, storage, AI defaults, audit records, and runtime controls.
+
+### Access and onboarding
+
+Sprintify supports normal public sign-up as well as platform-controlled access:
+
+- **Open sign-up** lets visitors create an account directly.
+- **Invite-only mode** closes self-service registration while organization
+  invitations continue to work.
+- **Wishlist** is an optional companion to invite-only mode. When enabled in
+  **Admin → Controls**, visitors can submit a Turnstile-protected access
+  request from the sign-in/sign-up flow. Platform administrators review requests
+  in **Admin → Wishlist**, then approve or reject them individually or in bulk.
+  Approval provisions an account and sends a password-setup email.
+- **Platform lockdown** is an emergency control that temporarily blocks new
+  sign-ups and creation operations while existing users can continue working.
+
+Every meaningful mutation is authorized, recorded in the append-only audit log,
+and revalidated in the application. Person-specific changes can also create
+in-app notifications.
+
 ## Requirements
 
 - Node.js `22.x` or `24.x`
@@ -98,6 +144,34 @@ scripts/             Seeds, migration runner, and maintenance scripts
 ```
 
 The application uses strict TypeScript, Biome, Tailwind CSS v4, and the `@/*` alias for `src/*` imports.
+
+## Architecture at a glance
+
+```text
+Browser
+  │
+  ├── Next.js App Router pages and client components
+  │     └── Server actions validate input, authorize, write audit events,
+  │         schedule derived work, and revalidate affected pages
+  │
+  ├── Better Auth
+  │     └── sessions, organizations, invitations, roles, SSO, and MFA
+  │
+  ├── PostgreSQL + pgvector (Drizzle ORM)
+  │     └── application data, audit trail, notifications, and embeddings
+  │
+  └── Integrations
+        ├── SMTP / React Email for transactional messages
+        ├── Cloudflare Turnstile for public-form protection
+        ├── local or S3-compatible storage for attachments
+        ├── configurable AI providers
+        └── Sentry for optional error reporting
+```
+
+The database schema is split by domain under [`src/db/schema`](src/db/schema),
+while server-side domain operations live under [`src/lib`](src/lib). See
+[AGENTS.md](AGENTS.md) for the project’s required mutation, authorization,
+embedding, notification, and design-system conventions.
 
 ## Database changes
 
