@@ -40,6 +40,8 @@ export const env = createEnv({
 
     // Observability — no-op when unset.
     SENTRY_DSN: z.string().optional(),
+    UMAMI_HOST_URL: z.string().optional(),
+    UMAMI_PIXEL_ID: z.string().optional(),
 
     // Admin seed script (scripts/seed-admin.ts) — optional at runtime.
     SEED_ADMIN_EMAIL: z.string().optional(),
@@ -49,11 +51,23 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
     NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
+    NEXT_PUBLIC_UMAMI_WEBSITE_ID: z.string().optional(),
+    NEXT_PUBLIC_UMAMI_SCRIPT_URL: z.string().optional(),
+    NEXT_PUBLIC_UMAMI_DOMAINS: z.string().optional(),
+    NEXT_PUBLIC_UMAMI_PIXEL_ID: z.string().optional(),
   },
   // Client + shared vars must be listed so Next.js statically inlines them.
   experimental__runtimeEnv: {
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    NEXT_PUBLIC_UMAMI_WEBSITE_ID: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
+    NEXT_PUBLIC_UMAMI_SCRIPT_URL:
+      process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL ??
+      (process.env.UMAMI_HOST_URL
+        ? `${process.env.UMAMI_HOST_URL.replace(/\/+$/, "")}/script.js`
+        : undefined),
+    NEXT_PUBLIC_UMAMI_DOMAINS: process.env.NEXT_PUBLIC_UMAMI_DOMAINS,
+    NEXT_PUBLIC_UMAMI_PIXEL_ID: process.env.NEXT_PUBLIC_UMAMI_PIXEL_ID,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,

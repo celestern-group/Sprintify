@@ -13,6 +13,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { trackEvent } from "@/lib/analytics";
 import { authClient } from "@/lib/auth-client";
 
 function ResetPasswordForm() {
@@ -55,12 +56,14 @@ function ResetPasswordForm() {
     setLoading(false);
 
     if (resetError) {
+      trackEvent("auth.password_reset", { success: false });
       setError(
         resetError.message ?? "Unable to reset password. Please try again.",
       );
       return;
     }
 
+    trackEvent("auth.password_reset", { success: true });
     router.push(
       next ? `/sign-in?redirectTo=${encodeURIComponent(next)}` : "/sign-in",
     );

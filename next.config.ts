@@ -14,9 +14,26 @@ import type { NextConfig } from "next";
 // - Images come from same-origin, data:/blob: (avatars, QR codes), and https.
 const isDev = process.env.NODE_ENV !== "production";
 
+const umamiScriptUrl =
+  process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL ??
+  (process.env.UMAMI_HOST_URL
+    ? `${process.env.UMAMI_HOST_URL.replace(/\/+$/, "")}/script.js`
+    : undefined);
+let umamiOrigin = "https://cloud.umami.is";
+if (umamiScriptUrl) {
+  try {
+    umamiOrigin = new URL(umamiScriptUrl).origin;
+  } catch {
+    // ignore parse error
+  }
+}
+const umamiScriptHosts = Array.from(
+  new Set(["https://cloud.umami.is", umamiOrigin]),
+).join(" ");
+
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://challenges.cloudflare.com`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://challenges.cloudflare.com ${umamiScriptHosts}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",

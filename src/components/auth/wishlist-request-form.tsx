@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { submitWishlistRequest } from "@/lib/actions/wishlist";
+import { trackEvent } from "@/lib/analytics";
 
 export function WishlistRequestForm() {
   const [name, setName] = useState("");
@@ -33,8 +34,10 @@ export function WishlistRequestForm() {
         email,
         captchaToken: captchaToken ?? "",
       });
+      trackEvent("auth.wishlist_request", { success: true });
       setSubmitted(true);
     } catch (cause) {
+      trackEvent("auth.wishlist_request", { success: false });
       setError(
         cause instanceof Error ? cause.message : "Unable to send your request.",
       );

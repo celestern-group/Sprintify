@@ -77,6 +77,8 @@ const PROJECT_SECTION_ICONS: Record<ProjectNavItemId, typeof IconSettings> = {
   cadence: IconAdjustments,
 };
 
+import { trackEvent } from "@/lib/analytics";
+
 /** One sidebar row. v0.3 selection is a filled tint block, never an edge bar. */
 function NavLink({
   href,
@@ -94,7 +96,14 @@ function NavLink({
   return (
     <Link
       href={href}
-      onClick={onNavigate}
+      onClick={() => {
+        trackEvent("navigation.route_change", {
+          label,
+          href,
+          source: "sidebar",
+        });
+        onNavigate();
+      }}
       aria-current={active ? "page" : undefined}
       className={cn(
         "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",

@@ -2,6 +2,7 @@ import { SerwistProvider } from "@serwist/turbopack/react";
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_Mono, Nunito_Sans } from "next/font/google";
 import "./globals.css";
+import { UmamiAnalytics } from "@/components/analytics/umami-analytics";
 import { DevNavigationDebug } from "@/components/dev-navigation-debug";
 import { DevServiceWorkerCleanup } from "@/components/dev-sw-cleanup";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -71,6 +72,7 @@ export default function RootLayout({
             {children}
           </ThemeProvider>
         </SerwistProvider>
+        <UmamiAnalytics />
       </body>
     </html>
   );
