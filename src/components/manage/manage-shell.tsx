@@ -18,6 +18,7 @@ import {
   IconSettings,
   IconShieldLock,
   IconSparkles,
+  IconUserPlus,
   IconUserShield,
   IconUsers,
   IconUsersGroup,
@@ -55,6 +56,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   users: "Users",
   organizations: "Organizations",
   platform: "Controls",
+  wishlist: "Wishlist",
   ai: "AI",
 };
 
@@ -251,6 +253,7 @@ export function ManageShell({
           icon: IconBuilding,
         },
         { title: "Users", url: "/admin/users", icon: IconShieldLock },
+        { title: "Wishlist", url: "/admin/wishlist", icon: IconUserPlus },
         { title: "Files", url: "/admin/files", icon: IconFolder },
         { title: "AI", url: "/admin/ai", icon: IconSparkles },
         { title: "Audit log", url: "/admin/audit", icon: IconHistory },
@@ -266,6 +269,11 @@ export function ManageShell({
       group: "Platform",
       label: "Admin — Users",
       href: "/admin/users",
+    });
+    paletteLinks.push({
+      group: "Platform",
+      label: "Admin — Wishlist",
+      href: "/admin/wishlist",
     });
     paletteLinks.push({
       group: "Platform",

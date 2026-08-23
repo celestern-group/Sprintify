@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { WishlistRequestForm } from "@/components/auth/wishlist-request-form";
 import { AuthShell } from "@/components/auth-shell";
 import {
   getPlatformLockdown,
   getSignupDisabled,
+  getWishlistEnabled,
 } from "@/lib/platform-lockdown";
 import { SignUpFormWithFallback } from "./sign-up-form";
 
@@ -11,9 +13,10 @@ import { SignUpFormWithFallback } from "./sign-up-form";
 export const dynamic = "force-dynamic";
 
 export default async function SignUpPage() {
-  const [lockdown, signupDisabled] = await Promise.all([
+  const [lockdown, signupDisabled, wishlistEnabled] = await Promise.all([
     getPlatformLockdown(),
     getSignupDisabled(),
+    getWishlistEnabled(),
   ]);
 
   // Platform lockdown ("red button", /admin/platform): the auth layer already
@@ -44,10 +47,11 @@ export default async function SignUpPage() {
   // rejects the /sign-up/email call, but explain it up front rather than let
   // people fill in the form and fail.
   if (signupDisabled) {
+    if (wishlistEnabled) return <WishlistRequestForm />;
     return (
       <AuthShell
         title="Invite only"
-        description="Sign-up is by invitation only. Ask an admin or organization owner to invite you."
+        description="Sign-up is by invitation only. Ask an administrator to invite you."
         footer={
           <p className="text-sm text-muted-foreground">
             <Link

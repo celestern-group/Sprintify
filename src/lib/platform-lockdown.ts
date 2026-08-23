@@ -53,3 +53,14 @@ export async function getSignupDisabled(): Promise<boolean> {
 
   return row?.signupDisabled ?? false;
 }
+
+/** Whether invite-only visitors may submit a platform access request. */
+export async function getWishlistEnabled(): Promise<boolean> {
+  const [row] = await db
+    .select({ wishlistEnabled: platformSettings.wishlistEnabled })
+    .from(platformSettings)
+    .where(eq(platformSettings.id, PLATFORM_SETTINGS_ID))
+    .limit(1);
+
+  return row?.wishlistEnabled ?? false;
+}

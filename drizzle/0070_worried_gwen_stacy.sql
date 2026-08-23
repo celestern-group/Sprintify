@@ -1,0 +1,1 @@
+ALTER TABLE "platformSettings" ADD COLUMN "wishlistEnabled" boolean DEFAULT false NOT NULL;

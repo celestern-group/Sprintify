@@ -11,4 +11,5 @@ export * from "./projects";
 export * from "./sprints";
 export * from "./sso";
 export * from "./teams";
+export * from "./wishlist";
 export * from "./work-items";
