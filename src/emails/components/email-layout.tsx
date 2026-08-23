@@ -31,7 +31,7 @@ export function EmailLayout({
       <Body style={main}>
         <Container style={container}>
           <Img
-            src={`${APP_URL}/logos/sprintify-logo.svg`}
+            src={`${APP_URL}/logos/sprintify-aurora.svg`}
             width="120"
             alt={APP_NAME}
             style={logo}

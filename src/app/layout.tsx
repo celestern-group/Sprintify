@@ -17,8 +17,9 @@ const notoSansMono = Noto_Sans_Mono({
 });
 
 const APP_NAME = "Sprintify";
-const APP_TITLE = "Sprintify — Coming Soon";
-const APP_DESCRIPTION = "Something new is on the way.";
+const APP_TITLE = "Sprintify — Make every sprint feel possible";
+const APP_DESCRIPTION =
+  "Sprintify brings your plans, progress, and people into one beautifully simple place.";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: "/icons/icon-192.png",
+    icon: "/icon.svg",
     apple: "/icons/apple-touch-icon.png",
   },
 };
