@@ -1,0 +1,23 @@
+# Node 22 for the build. pnpm@11.10.0 (pinned in package.json's
+# `packageManager` field) requires Node >= 22.13 — it imports the `node:sqlite`
+# builtin, which does not exist on Node 20, so the build must run on Node 22+.
+[phases.setup]
+nixPkgs = ["nodejs_22"]
+
+# Nixpacks force-installs an old corepack that is too old to run pnpm 11.10.0.
+# Override the install phase to install a modern corepack that can run pnpm 11,
+# so we keep pnpm 11.10.0 exactly and the pnpm-lock.yaml (lockfileVersion 9.0)
+# stays valid under --frozen-lockfile.
+[phases.install]
+cmds = [
+  "npm install -g corepack@latest",
+  "corepack enable",
+  "pnpm install --frozen-lockfile",
+]
+
+# Migrations run at START, never at build: the build has no database (and on a
+# multi-instance rollout, a build-time migration would race the old code still
+# serving traffic). Startup fails loudly if a migration fails, so the container
+# never comes up against a schema it cannot use.
+[start]
+cmd = "pnpm db:migrate:deploy && pnpm start"

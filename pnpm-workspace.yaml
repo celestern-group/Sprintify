@@ -1,0 +1,25 @@
+packages:
+  - "."
+# Transitive advisories with no fix available upstream yet. `sharp` is the only
+# one that actually runs in production (Next image optimization); the rest sit
+# in the build toolchain (next/postcss, @sentry webpack plugin, react-email's
+# preview server) and are pinned so `pnpm audit --prod` stays clean enough to
+# gate CI on. Drop an entry once the direct dependency ships the fixed range.
+overrides:
+  sharp: ">=0.35.0"
+  postcss: ">=8.5.23"
+  fast-uri: ">=3.1.5"
+  brace-expansion: ">=5.0.9"
+  socket.io-parser: ">=4.2.7"
+  # Reached only through drizzle-kit's deprecated @esbuild-kit loader; the
+  # advisory is in esbuild's dev server, which nothing here starts.
+  esbuild: ">=0.25.0"
+allowBuilds:
+  '@sentry/cli': false
+  '@swc/core': true
+  better-sqlite3: true
+  esbuild: true
+  sharp: true
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver

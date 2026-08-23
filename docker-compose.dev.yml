@@ -1,0 +1,53 @@
+services:
+  app:
+    build:
+      context: .
+      target: development
+    command: sh -c "node scripts/migrate.mjs && pnpm dev --hostname 0.0.0.0"
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://sprintify:sprintify@database:5432/sprintify
+      BETTER_AUTH_SECRET: development-only-secret-change-before-production
+      BETTER_AUTH_URL: http://localhost:3000
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_USER: development
+      SMTP_PASSWORD: development
+      EMAIL_FROM: no-reply@sprintify.local
+      EMAIL_FROM_NAME: Sprintify Development
+      STORAGE_BACKEND: local
+      STORAGE_LOCAL_PATH: /app/.data/storage
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - app_node_modules:/app/node_modules
+      - app_storage:/app/.data/storage
+
+  database:
+    image: pgvector/pgvector:pg18
+    environment:
+      POSTGRES_DB: sprintify
+      POSTGRES_USER: sprintify
+      POSTGRES_PASSWORD: sprintify
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sprintify -d sprintify"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mailpit:
+    image: axllent/mailpit:v1.28
+    ports:
+      - "8025:8025"
+
+volumes:
+  app_node_modules:
+  app_storage:
+  postgres_data:

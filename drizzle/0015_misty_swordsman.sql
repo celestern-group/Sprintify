@@ -1,0 +1,1 @@
+ALTER TABLE "ssoProvider" ADD COLUMN "domainVerified" boolean DEFAULT false;

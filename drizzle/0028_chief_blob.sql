@@ -1,0 +1,1 @@
+ALTER TABLE "platformSettings" ADD COLUMN "signupDisabled" boolean DEFAULT false NOT NULL;

@@ -1,0 +1,1 @@
+ALTER TABLE "workItem" ADD COLUMN "actualEfforts" numeric(10, 2);

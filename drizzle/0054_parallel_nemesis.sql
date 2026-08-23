@@ -1,0 +1,2 @@
+ALTER TABLE "workItemType" DROP CONSTRAINT "workItemType_hierarchyLevel_check";--> statement-breakpoint
+ALTER TABLE "workItemType" ADD CONSTRAINT "workItemType_hierarchyLevel_check" CHECK ("workItemType"."hierarchyLevel" between 0 and 3);

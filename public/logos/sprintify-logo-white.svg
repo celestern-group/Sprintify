@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 180" role="img" aria-labelledby="title">
+  <title id="title">Sprintify</title>
+  <path fill="#fff" d="M90 12 6 168h45l39-76 39 76h45L90 12Zm0 76 22 43H68l22-43Z"/>
+  <text x="192" y="132" fill="#fff" font-family="Nunito Sans, Nunito, Arial, sans-serif" font-size="100" font-weight="700" letter-spacing="-5">Sprintify</text>
+</svg>

@@ -1,0 +1,1 @@
+ALTER TABLE "organization" ADD COLUMN "strictWorkItemHierarchy" boolean DEFAULT true NOT NULL;

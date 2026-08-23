@@ -1,0 +1,1 @@
+ALTER TABLE "workItemField" ADD COLUMN "placement" text DEFAULT 'main' NOT NULL;

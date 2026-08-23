@@ -1,0 +1,34 @@
+services:
+  app:
+    build:
+      context: .
+      target: production
+      args:
+        NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY:?Set NEXT_PUBLIC_TURNSTILE_SITE_KEY in .env.production and pass --env-file .env.production}
+    env_file:
+      - .env.production
+    ports:
+      - "${PORT:-3000}:3000"
+    restart: unless-stopped
+
+  # Optional self-hosted production database. Uncomment this block and the
+  # volume below only when Postgres is intentionally hosted on this machine.
+  # Set DATABASE_URL in .env.production to:
+  # postgresql://sprintify:CHANGE_ME@database:5432/sprintify
+  # database:
+  #   image: pgvector/pgvector:pg18
+  #   environment:
+  #     POSTGRES_DB: sprintify
+  #     POSTGRES_USER: sprintify
+  #     POSTGRES_PASSWORD: CHANGE_ME
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U sprintify -d sprintify"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 10
+  #   restart: unless-stopped
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data:

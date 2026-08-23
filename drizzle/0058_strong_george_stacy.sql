@@ -1,0 +1,1 @@
+ALTER TABLE "sprintMemberCapacity" ADD COLUMN "hoursPerDayPinned" boolean DEFAULT false NOT NULL;
