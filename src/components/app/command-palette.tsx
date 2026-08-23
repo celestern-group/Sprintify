@@ -13,6 +13,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Kbd } from "@/components/ui/kbd";
+import { trackEvent } from "@/lib/analytics";
 
 export type PaletteLink = {
   group: string;
@@ -31,16 +32,23 @@ export function CommandPalette({
   const router = useRouter();
   const { setTheme } = useTheme();
 
+  const toggleOpen = React.useCallback((next: boolean) => {
+    if (next) {
+      trackEvent("ui.dialog_opened", { name: "command_palette" });
+    }
+    setOpen(next);
+  }, []);
+
   React.useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "k" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
-        setOpen((current) => !current);
+        toggleOpen(!open);
       }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [open, toggleOpen]);
 
   const groups = links.reduce<Map<string, PaletteLink[]>>((acc, link) => {
     const list = acc.get(link.group) ?? [];
@@ -54,7 +62,7 @@ export function CommandPalette({
       <>
         <button
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={() => toggleOpen(true)}
           className="flex h-9 w-full items-center gap-2 rounded-lg border border-input bg-card px-3 text-xs text-muted-foreground shadow-card transition-colors outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
         >
           <IconSearch className="size-3.5 shrink-0" />
@@ -70,7 +78,7 @@ export function CommandPalette({
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => toggleOpen(true)}
         className="hidden h-8 w-56 items-center gap-2 rounded-md border border-input bg-muted px-2.5 text-xs text-muted-foreground transition-colors outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring sm:flex lg:w-72"
       >
         <IconSearch className="size-3.5 shrink-0" />
@@ -79,7 +87,7 @@ export function CommandPalette({
       </button>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => toggleOpen(true)}
         aria-label="Search"
         className="flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring sm:hidden"
       >
@@ -101,6 +109,11 @@ export function CommandPalette({
                 <CommandItem
                   key={link.href}
                   onSelect={() => {
+                    trackEvent("ui.shortcut_press", {
+                      action: "navigate",
+                      href: link.href,
+                      label: link.label,
+                    });
                     setOpen(false);
                     router.push(link.href);
                   }}
@@ -113,6 +126,10 @@ export function CommandPalette({
           <CommandGroup heading="Theme">
             <CommandItem
               onSelect={() => {
+                trackEvent("ui.theme_toggle", {
+                  to: "light",
+                  source: "command_palette",
+                });
                 setOpen(false);
                 setTheme("light");
               }}
@@ -122,6 +139,10 @@ export function CommandPalette({
             </CommandItem>
             <CommandItem
               onSelect={() => {
+                trackEvent("ui.theme_toggle", {
+                  to: "dark",
+                  source: "command_palette",
+                });
                 setOpen(false);
                 setTheme("dark");
               }}

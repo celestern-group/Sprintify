@@ -114,6 +114,9 @@ export function scheduleAiCommentReply(input: {
 
       await recordAudit({
         action: "workItemComment.aiReplied",
+        // This assistant reply already runs inside Next's `after()` callback.
+        // Send analytics from this callback rather than nesting another one.
+        analyticsDelivery: "immediate",
         organizationId: input.organizationId,
         // No actor: nobody performed this write. The metadata names who
         // triggered it, which is the honest record.

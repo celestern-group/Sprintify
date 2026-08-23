@@ -77,21 +77,32 @@ export default async function Home() {
           <a
             className="transition-colors hover:text-foreground"
             href="#product"
+            data-umami-event="landing.nav"
+            data-umami-event-section="product"
           >
             Product
           </a>
           <a
             className="transition-colors hover:text-foreground"
             href="#why-sprintify"
+            data-umami-event="landing.nav"
+            data-umami-event-section="why-sprintify"
           >
             Why Sprintify
           </a>
-          <a className="transition-colors hover:text-foreground" href="#ai">
+          <a
+            className="transition-colors hover:text-foreground"
+            href="#ai"
+            data-umami-event="landing.nav"
+            data-umami-event-section="ai"
+          >
             AI
           </a>
           <a
             className="transition-colors hover:text-foreground"
             href="#get-started"
+            data-umami-event="landing.nav"
+            data-umami-event-section="get-started"
           >
             Get started
           </a>
@@ -101,14 +112,26 @@ export default async function Home() {
           <Button
             variant="ghost"
             nativeButton={false}
-            render={<Link href="/sign-in">Log in</Link>}
+            render={
+              <Link
+                href="/sign-in"
+                data-umami-event="cta.login"
+                data-umami-event-location="header"
+              >
+                Log in
+              </Link>
+            }
             className="hidden sm:inline-flex"
           />
           <Button
             variant="gradient"
             nativeButton={false}
             render={
-              <Link href="/sign-up">
+              <Link
+                href="/sign-up"
+                data-umami-event="cta.start_free"
+                data-umami-event-location="header"
+              >
                 Start free <IconArrowRight data-icon="inline-end" />
               </Link>
             }
@@ -138,7 +161,11 @@ export default async function Home() {
               variant="gradient"
               nativeButton={false}
               render={
-                <Link href="/sign-up">
+                <Link
+                  href="/sign-up"
+                  data-umami-event="cta.start_free"
+                  data-umami-event-location="hero"
+                >
                   Start building for free{" "}
                   <IconArrowRight data-icon="inline-end" />
                 </Link>
@@ -148,7 +175,15 @@ export default async function Home() {
               size="lg"
               variant="outline"
               nativeButton={false}
-              render={<Link href="/sign-in">Explore your workspace</Link>}
+              render={
+                <Link
+                  href="/sign-in"
+                  data-umami-event="cta.explore_workspace"
+                  data-umami-event-location="hero"
+                >
+                  Explore your workspace
+                </Link>
+              }
             />
           </div>
           <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
@@ -317,7 +352,11 @@ export default async function Home() {
               className="mt-8 bg-white text-primary hover:bg-white/90"
               nativeButton={false}
               render={
-                <Link href="/sign-up">
+                <Link
+                  href="/sign-up"
+                  data-umami-event="cta.meet_ai"
+                  data-umami-event-location="ai_section"
+                >
                   Meet Sprintify AI <IconArrowRight data-icon="inline-end" />
                 </Link>
               }
@@ -412,7 +451,11 @@ export default async function Home() {
             variant="outline"
             nativeButton={false}
             render={
-              <Link href="/sign-up">
+              <Link
+                href="/sign-up"
+                data-umami-event="cta.build_first_sprint"
+                data-umami-event-location="why_sprintify"
+              >
                 Build your first sprint{" "}
                 <IconArrowRight data-icon="inline-end" />
               </Link>
@@ -438,7 +481,11 @@ export default async function Home() {
             size="lg"
             nativeButton={false}
             render={
-              <Link href="/sign-up">
+              <Link
+                href="/sign-up"
+                data-umami-event="cta.start_free"
+                data-umami-event-location="get_started_bottom"
+              >
                 Start for free <IconArrowRight data-icon="inline-end" />
               </Link>
             }
@@ -452,10 +499,18 @@ export default async function Home() {
             © {new Date().getFullYear()} Sprintify. Built for momentum.
           </span>
           <div className="flex gap-4">
-            <Link href="/sign-in" className="hover:text-foreground">
+            <Link
+              href="/sign-in"
+              data-umami-event="footer.login"
+              className="hover:text-foreground"
+            >
               Log in
             </Link>
-            <Link href="/sign-up" className="hover:text-foreground">
+            <Link
+              href="/sign-up"
+              data-umami-event="footer.start_free"
+              className="hover:text-foreground"
+            >
               Get started
             </Link>
           </div>

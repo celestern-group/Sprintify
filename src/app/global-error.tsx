@@ -2,6 +2,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
+import { trackEvent } from "@/lib/analytics";
 import "./globals.css";
 
 /**
@@ -31,6 +32,7 @@ export default function GlobalError({
 }) {
   useEffect(() => {
     Sentry.captureException(error);
+    trackEvent("app.global_error");
   }, [error]);
 
   return (
@@ -48,7 +50,10 @@ export default function GlobalError({
             </p>
             <button
               type="button"
-              onClick={reset}
+              onClick={() => {
+                trackEvent("app.global_error_retry");
+                reset();
+              }}
               className="mt-2 inline-flex h-8 cursor-pointer items-center justify-center rounded-md bg-primary px-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
             >
               Try again

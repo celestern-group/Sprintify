@@ -17,6 +17,7 @@ import {
   markNotificationRead,
   type NotificationRow,
 } from "@/lib/actions/notifications";
+import { trackEvent } from "@/lib/analytics";
 import { withReturnTo } from "@/lib/return-to";
 import { cn } from "@/lib/utils";
 
@@ -45,6 +46,10 @@ export function NotificationBell({
   const returnTo = useReturnToHref();
 
   function openNotification(row: NotificationRow) {
+    trackEvent("ui.shortcut_press", {
+      action: "open_notification",
+      type: row.action,
+    });
     setOpen(false);
     startTransition(async () => {
       if (!row.readAt) {
@@ -57,6 +62,7 @@ export function NotificationBell({
   }
 
   function markAll() {
+    trackEvent("ui.shortcut_press", { action: "mark_all_notifications_read" });
     startTransition(async () => {
       await markAllNotificationsRead({ organizationId });
       router.refresh();

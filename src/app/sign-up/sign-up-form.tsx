@@ -14,6 +14,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { trackEvent } from "@/lib/analytics";
 import { authClient } from "@/lib/auth-client";
 
 export function SignUpFormWithFallback() {
@@ -64,10 +65,12 @@ function SignUpForm() {
     setLoading(false);
 
     if (signUpError) {
+      trackEvent("auth.sign_up", { success: false });
       setError(signUpError.message ?? "Unable to sign up. Please try again.");
       return;
     }
 
+    trackEvent("auth.sign_up", { success: true });
     setSubmitted(true);
   }
 
@@ -106,6 +109,7 @@ function SignUpForm() {
           Already have an account?{" "}
           <Link
             href="/sign-in"
+            data-umami-event="auth.switch_to_signin"
             className="font-semibold text-brand underline-offset-4 hover:underline"
           >
             Sign in

@@ -18,6 +18,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { trackEvent } from "@/lib/analytics";
 import { authClient } from "@/lib/auth-client";
 
 export function TwoFactorForm() {
@@ -48,6 +49,10 @@ export function TwoFactorForm() {
     setLoading(false);
 
     if (verifyError) {
+      trackEvent("auth.sign_in", {
+        success: false,
+        mode: "2fa",
+      });
       setError(
         verifyError.message ??
           (mode === "totp"
@@ -57,6 +62,7 @@ export function TwoFactorForm() {
       return;
     }
 
+    trackEvent("auth.sign_in", { success: true, mode: "2fa" });
     router.push(redirectTo);
   }
 

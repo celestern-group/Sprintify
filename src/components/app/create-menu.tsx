@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { trackEvent } from "@/lib/analytics";
 
 /** Top-bar violet "Create" action: the one filled-primary action in the chrome. */
 export function CreateMenu({
@@ -42,14 +43,25 @@ export function CreateMenu({
       />
       <DropdownMenuContent align="end" sideOffset={6} className="min-w-52">
         {newItemHref ? (
-          <DropdownMenuItem onClick={() => router.push(newItemHref)}>
+          <DropdownMenuItem
+            onClick={() => {
+              trackEvent("work_item.create", { source: "create_menu" });
+              router.push(newItemHref);
+            }}
+          >
             <IconClipboardPlus />
             Work item
           </DropdownMenuItem>
         ) : null}
         {showInvite ? (
           <DropdownMenuItem
-            onClick={() => router.push(`/manage-org/${activeSlug}/members`)}
+            onClick={() => {
+              trackEvent("ui.shortcut_press", {
+                action: "invite_member",
+                source: "create_menu",
+              });
+              router.push(`/manage-org/${activeSlug}/members`);
+            }}
           >
             <IconUserPlus />
             Invite member
