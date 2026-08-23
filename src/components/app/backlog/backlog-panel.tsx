@@ -53,6 +53,7 @@ import {
   setWorkItemAttributes,
   setWorkItemParent,
 } from "@/lib/actions/work-items";
+import { trackEvent } from "@/lib/analytics";
 import { countUnestimated, sumEstimates } from "@/lib/estimate-rollup";
 import { between } from "@/lib/rank";
 import { withReturnTo } from "@/lib/return-to";
@@ -381,6 +382,10 @@ function BacklogBody({
   );
 
   function setView(next: BacklogView) {
+    trackEvent("backlog.view_mode_change", {
+      view: next,
+      project: project.key,
+    });
     const params = new URLSearchParams(searchParams.toString());
     params.set("view", next);
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
@@ -401,6 +406,11 @@ function BacklogBody({
   function runSemanticSearch() {
     const query = search.trim();
     if (query.length < 2) return;
+    trackEvent("backlog.search", {
+      type: "semantic",
+      length: query.length,
+      project: project.key,
+    });
     startSearching(async () => {
       try {
         const result = await searchWorkItemsByMeaning({
@@ -422,6 +432,7 @@ function BacklogBody({
   }
 
   function clearFilters() {
+    trackEvent("backlog.filter", { action: "clear", project: project.key });
     setSearch("");
     setSemantic(null);
     setStatusFilter([]);
@@ -724,6 +735,7 @@ function BacklogBody({
   // An item is a page, not a dialog: it is linkable, refreshable and has room
   // for the prose blocks. Prefetched so opening one off the board is instant.
   function openItem(item: WorkItemRow) {
+    trackEvent("work_item.view", { key: item.key, typeId: item.typeId });
     router.push(withReturnTo(`${basePath}/backlog/${item.key}`, returnTo));
   }
 

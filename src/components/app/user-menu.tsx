@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { trackEvent } from "@/lib/analytics";
 import { authClient } from "@/lib/auth-client";
 
 /**
@@ -44,6 +45,7 @@ export function UserMenu({
 
   async function handleSignOut() {
     setSigningOut(true);
+    trackEvent("auth.sign_out");
     await authClient.signOut();
     router.push("/sign-in");
   }

@@ -13,6 +13,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { trackEvent } from "@/lib/analytics";
 import { authClient } from "@/lib/auth-client";
 
 export default function ForgotPasswordPage() {
@@ -38,12 +39,14 @@ export default function ForgotPasswordPage() {
     setLoading(false);
 
     if (requestError) {
+      trackEvent("auth.forgot_password", { success: false });
       setError(
         requestError.message ?? "Unable to send reset email. Please try again.",
       );
       return;
     }
 
+    trackEvent("auth.forgot_password", { success: true });
     setSent(true);
   }
 

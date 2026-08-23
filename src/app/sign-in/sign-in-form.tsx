@@ -15,6 +15,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { trackEvent } from "@/lib/analytics";
 import { authClient } from "@/lib/auth-client";
 
 export function SignInForm({
@@ -61,6 +62,7 @@ export function SignInForm({
     setLoading(false);
 
     if (signInError) {
+      trackEvent("auth.sign_in", { success: false });
       if (signInError.status === 403) {
         setNeedsVerification(true);
         setError("Please verify your email address before signing in.");
@@ -69,6 +71,8 @@ export function SignInForm({
       }
       return;
     }
+
+    trackEvent("auth.sign_in", { success: true });
 
     // 2FA-enabled accounts aren't signed in yet — the second factor must be
     // verified first. Carry the intended destination through the challenge.
@@ -81,6 +85,7 @@ export function SignInForm({
   }
 
   async function handleResendVerification() {
+    trackEvent("auth.resend_verification");
     setResendState("sending");
     await authClient.sendVerificationEmail({
       email,
@@ -193,6 +198,7 @@ export function SignInForm({
           onSubmit={(event) => {
             event.preventDefault();
             if (!ssoSlug.trim()) return;
+            trackEvent("auth.sign_in", { mode: "sso", slug: ssoSlug.trim() });
             router.push(`/sign-in/${encodeURIComponent(ssoSlug.trim())}`);
           }}
           noValidate
@@ -215,7 +221,10 @@ export function SignInForm({
           type="button"
           variant="ghost"
           className="w-full"
-          onClick={() => setShowSsoField(true)}
+          onClick={() => {
+            trackEvent("ui.shortcut_press", { action: "toggle_sso_field" });
+            setShowSsoField(true);
+          }}
         >
           Sign in with your company&apos;s SSO
         </Button>

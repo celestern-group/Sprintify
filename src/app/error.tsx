@@ -4,6 +4,7 @@ import * as Sentry from "@sentry/nextjs";
 import { IconAlertTriangle } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/lib/analytics";
 
 export default function ErrorBoundary({
   error,
@@ -14,6 +15,7 @@ export default function ErrorBoundary({
 }) {
   useEffect(() => {
     Sentry.captureException(error);
+    trackEvent("app.error");
   }, [error]);
 
   return (
@@ -37,7 +39,13 @@ export default function ErrorBoundary({
             Reference: {error.digest}
           </p>
         ) : null}
-        <Button onClick={reset} className="mt-2">
+        <Button
+          onClick={() => {
+            trackEvent("app.error_retry");
+            reset();
+          }}
+          className="mt-2"
+        >
           Try again
         </Button>
       </div>

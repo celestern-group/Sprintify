@@ -12,16 +12,20 @@ import {
   Text,
 } from "react-email";
 
+import { UmamiPixel } from "./umami-pixel";
+
 const APP_NAME = process.env.EMAIL_FROM_NAME || "Sprintify";
 const APP_URL = process.env.BETTER_AUTH_URL || "http://localhost:3000";
 
 export function EmailLayout({
   preview,
   heading,
+  pixelId,
   children,
 }: {
   preview: string;
   heading: string;
+  pixelId?: string;
   children: ReactNode;
 }) {
   return (
@@ -43,6 +47,7 @@ export function EmailLayout({
             {APP_NAME} · This is an automated message, please don&apos;t reply
             to this email.
           </Text>
+          <UmamiPixel pixelId={pixelId} />
         </Container>
       </Body>
     </Html>
