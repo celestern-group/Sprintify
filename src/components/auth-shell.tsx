@@ -27,7 +27,7 @@ export function AuthShell({
       </div>
       <div className="flex w-full max-w-md flex-col items-center gap-8">
         <Image
-          src="/logos/sprintify-logo.svg"
+          src="/logos/sprintify-aurora.svg"
           alt="Sprintify"
           width={160}
           height={40}
@@ -35,7 +35,7 @@ export function AuthShell({
           priority
         />
         <Image
-          src="/logos/sprintify-logo-white.svg"
+          src="/logos/sprintify-aurora-white.svg"
           alt="Sprintify"
           width={160}
           height={40}

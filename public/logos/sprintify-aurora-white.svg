@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 552 112" role="img" aria-labelledby="title">
+  <title id="title">Sprintify</title>
+  <defs>
+    <linearGradient id="violet" x1="12" y1="10" x2="94" y2="102" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a98bff"/>
+      <stop offset="1" stop-color="#6d4aff"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="96" height="96" rx="28" fill="url(#violet)"/>
+  <path d="M77.7 30.5c-5.9-4.4-13.3-6.5-22.2-6.5-15.8 0-27 7.6-27 19.4 0 10.3 8.5 15.1 23.1 18.3 10.1 2.2 13.7 4.5 13.7 8.7 0 4.4-4.3 7.1-11.3 7.1-8.2 0-15.1-2.9-21.4-8.7L25 78.4C32.9 85 42 88 53.8 88c16.9 0 28.5-7.6 28.5-20.2 0-11.1-8.9-15.9-24.7-19.3-8.5-1.9-12.2-3.9-12.2-7.8 0-3.8 3.9-6.2 10.2-6.2 6.8 0 12.5 2.1 17.3 6.3l4.8-10.3Z" fill="#fff"/>
+  <path d="M29 86.5c13.2 8.6 34.5 11.2 51.8 0" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="4" opacity=".52"/>
+  <text x="128" y="75" fill="#fafafa" font-family="Nunito Sans, Nunito, Arial, sans-serif" font-size="62" font-weight="800" letter-spacing="-3">Sprintify</text>
+</svg>

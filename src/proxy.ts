@@ -56,5 +56,10 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  // Public assets are not application routes. Let the framework serve them
+  // directly so SVG logos, favicons, fonts, and future media cannot be
+  // redirected to /sign-in by the session gate.
+  matcher: [
+    "/((?!api|_next/static|_next/image|.*\\.(?:png|svg|ico|webp|jpg|jpeg|gif|woff2?)$).*)",
+  ],
 };
