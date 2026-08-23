@@ -17,7 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
-export function SignInForm({ signUpEnabled }: { signUpEnabled: boolean }) {
+export function SignInForm({
+  signUpEnabled,
+  requestAccessEnabled,
+}: {
+  signUpEnabled: boolean;
+  requestAccessEnabled: boolean;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedRedirect = searchParams.get("redirectTo");
@@ -103,6 +109,13 @@ export function SignInForm({ signUpEnabled }: { signUpEnabled: boolean }) {
                 Sign up
               </Link>
             </p>
+          ) : requestAccessEnabled ? (
+            <Button
+              variant="outline"
+              size="sm"
+              nativeButton={false}
+              render={<Link href="/sign-up">Request access</Link>}
+            />
           ) : null}
           <Link
             href="/"

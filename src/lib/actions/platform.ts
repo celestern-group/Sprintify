@@ -8,6 +8,7 @@ import { recordAudit } from "@/lib/audit";
 import {
   getPlatformLockdown,
   getSignupDisabled,
+  getWishlistEnabled,
   PLATFORM_SETTINGS_ID,
   type PlatformLockdown,
 } from "@/lib/platform-lockdown";
@@ -84,6 +85,39 @@ export async function setSignupDisabled(input: { disabled: boolean }) {
     action: parsed.disabled
       ? "platform.signup_disabled"
       : "platform.signup_enabled",
+    actor: { id: session.user.id, email: session.user.email },
+    targetType: "platform",
+    targetId: PLATFORM_SETTINGS_ID,
+  });
+
+  revalidatePath("/admin/platform", "page");
+  revalidatePath("/sign-up", "page");
+  revalidatePath("/sign-in", "page");
+}
+
+export async function getWishlistEnabledState(): Promise<boolean> {
+  await requireAdminAction();
+  return getWishlistEnabled();
+}
+
+const setWishlistEnabledSchema = z.object({ enabled: z.boolean() });
+
+export async function setWishlistEnabled(input: { enabled: boolean }) {
+  const parsed = setWishlistEnabledSchema.parse(input);
+  const session = await requireAdminAction();
+
+  await db
+    .insert(platformSettings)
+    .values({ id: PLATFORM_SETTINGS_ID, wishlistEnabled: parsed.enabled })
+    .onConflictDoUpdate({
+      target: platformSettings.id,
+      set: { wishlistEnabled: parsed.enabled },
+    });
+
+  await recordAudit({
+    action: parsed.enabled
+      ? "platform.wishlist_enabled"
+      : "platform.wishlist_disabled",
     actor: { id: session.user.id, email: session.user.email },
     targetType: "platform",
     targetId: PLATFORM_SETTINGS_ID,

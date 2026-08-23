@@ -8,6 +8,9 @@ import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 //   team/invite creation platform-wide during an incident.
 // - signupDisabled: "invite only" mode — turns off self-serve public sign-up
 //   while org invitations keep working (invitees are provisioned server-side).
+// - wishlistEnabled: allows people to request platform access while invite-only
+//   mode is active. It defaults off so existing invite-only deployments remain
+//   closed unless an administrator deliberately opens this route.
 export const platformSettings = pgTable("platformSettings", {
   id: text().primaryKey(),
   lockdownEnabled: boolean().default(false).notNull(),
@@ -15,6 +18,7 @@ export const platformSettings = pgTable("platformSettings", {
   lockdownAt: timestamp(),
   lockdownByUserId: text(),
   signupDisabled: boolean().default(false).notNull(),
+  wishlistEnabled: boolean().default(false).notNull(),
   updatedAt: timestamp()
     .defaultNow()
     .$onUpdate(() => new Date())
